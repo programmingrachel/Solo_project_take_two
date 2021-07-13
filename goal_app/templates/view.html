@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+    </script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+
+</head>
+<body>
+    <div>
+        <h1>Hey {{current_user}}, here are your goals for 2021</h1>
+        <a href="/logout">Logout</a>
+        <a href="/homepage">Back</a>
+        <!-- <a href="/setgoal">Set a new Goal</a> -->
+    </div>
+    <div>
+        <h4>Goals for 2021</h4>
+        <div>
+            
+                {% for goal in goals %}
+                {% if current_user.id == goal.added_by.id %}
+                <h4>Goal</h4>
+                <p>{{goal.goal}}</p>
+                <h4>Why is this goal important to you?</h4>
+                <p>{{goal.desc}}</p>
+                <h4>What is your short term goal?</h4> 
+                <p>{{goal.short_term}}</p>
+                <h4>Your start and end dates</h4>
+                <p>{{goal.start_date}} {{goal.target_date}}</p>
+                <a href="{{goal.id}}/editgoal">Edit this Goal</a>
+                <a href="/setgoal"> Set a new goal</a>
+                {% endif %}
+            <!-- <p>start date </p>insert calender here <p>Target Date insert calender here</p> -->
+        </div>{% endfor %}
+    </div>
+    <div>
+        <h1>Way to go! You are making Progress!</h1>
+        <p>Here are a list of tasks you have completed in the last 30 days to get that goal</p>
+        <div>
+            {% for task in tasks %}
+                {% if current_user.id == task.goal_setter.id %}
+                <h4>Task</h4>
+                <p>{{task.task}} <h4>to get to this</h4> {{task.added_to_goal}}</p>
+                <p></p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    
+</body>
+</html>

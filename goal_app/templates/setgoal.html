@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Goals</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+        </script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+
+</head>
+
+<body>
+    <div>
+        <h1>Hey {{current_user.first_name}}! Lets set some goals</h1>
+        <a href="/homepage">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="row">
+        <div class="col-5">
+            <form action="/create_goal" method="POST">
+                {% csrf_token %}
+                <div class=" form-group">
+                    <label for="goal">Goal</label>
+                    <input type="text" name="goal" value="">
+                </div>
+                <div class=" form-group">
+                    <label for="why">Why is this goal important to you</label>
+                    <input type="text" name="why" value="">
+                </div>
+                <div class=" form-group">
+                    <label for="short">What is your short term goal?</label>
+                    <input type="text" name="short" value="">
+                </div>
+                <div class=" form-group">
+                    <label for="starttime">Start Date</label>
+                    <input type="date" name="starttime" id="" required>
+                </div>
+                <div class=" form-group">
+                    <label for="target_date">Target Date</label>
+                    <input type="date" name="target_date" id="" required>
+                </div>
+                <button class="btn btn-primary">Set Goal</button>
+        </div>
+        </form>
+    </div>
+    <div class="col-5">
+        <p>Make a list of 3 things that you could to today to reach this goal</p>
+        <form action="/create_task" method="POST">
+            {% csrf_token %}
+            <div class=" form-group">
+                <label for="task"></label>
+                <input type="text" name="task" value="">
+            </div>
+            <div class=" form-group">
+                <label for="task"></label>
+                <input type="text" name="task" value="">
+            </div>
+            <div class=" form-group">
+                <label for="task"></label>
+                <input type="text" name="task" value="">
+            </div>                
+            <div class=" form-group">
+                <label for="">Select goal</label>
+                <select id="" name="goal">
+                    {% for goal in goals %}
+                        {% if current_user.id == goal.added_by.id %}
+                    <option value="{{goal.goal.id}}">{{ goal.goal.id }}</option>
+                        {% endif %}
+                </select>
+                <!-- <input type="submit"> -->
+                {% endfor %}
+            <button type="submit">Add Tasks</button>
+        </div>
+    </form>
+    </div>
+    <p>repeat this step daily</p>
+    </div>
+    <h3>this area is designated for api to generate random inspirational quotes</h3>
+    <!-- </div> -->
+</body>
+
+</html>

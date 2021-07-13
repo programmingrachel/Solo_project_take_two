@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edit goals</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+        </script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+
+</head>
+
+<body>
+    <div>
+        <h1>Edit your goal</h1>
+        <a href="/homepage">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <form action="/{{goal.id}}/update" method="POST">
+        {% csrf_token %}
+        <div class=" form-group">
+            <label for="goal">Goal</label>
+            <textarea name="goal" cols="50" rows="3" class="form-control" value="">{{ goal.goal }}</textarea>
+        </div>
+        <div class=" form-group">
+            <label for="why">Why is this goal important to you</label>
+            <textarea name="why" cols="50" rows="3" class="form-control" value="">{{ goal.desc }}</textarea>
+        </div>
+        <div class=" form-group">
+            <label for="short">What is your short term goal?</label>
+            <textarea name="short" cols="50" rows="3" class="form-control" value="">{{ goal.short_term }}</textarea>
+        </div>
+        <div class=" form-group">
+            <label for="starttime">Start Date</label>
+            <input type="date" name="starttime" id="" value="{{goal.start_date}}"required>
+            <label for="target_date">Target Date</label>
+            <input type="date" name="target_date" id=""  required>
+        </div>
+        <div class=" form-group">
+            <button class="btn btn-primary">Save</button>
+        </form>
+        <!-- <form action="{{goal.id}}/delete">
+            <button class="btn btn-primary">Delete</button>
+        </form> -->
+        </div>
+    </div>
+
+    <div>
