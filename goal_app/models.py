@@ -2,6 +2,18 @@ from os import error
 from django.db import models
 import re
 import bcrypt
+from django.core import validators
+from django.core.exceptions import ValidationError
+
+def firstCapitalLetter(value):
+    if value != value.title():
+        raise ValidationError(f"{value}'s first letter needs a capital (like {value.title()})")
+
+def validateLengthGreaterThanTwo(value):
+    if len(value) < 3:
+        raise ValidationError(
+            '{} must be longer than: 2'.format(value)
+        )
 
 class UserManager(models.Manager):
     def user_validator(self, reqPOST):
@@ -26,18 +38,22 @@ class UserManager(models.Manager):
         return errors
 
 class User(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255,validators=[validators.MinLengthValidator(5,"First name too short"),firstCapitalLetter,])
+    last_name = models.CharField(max_length=255, validators= [validators.MinLengthValidator(5,"Last name too short"),])
     email = models.CharField(max_length=150)
     password = models.CharField(max_length=25)
     confirm = models.CharField(max_length=25)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    objects = UserManager()
+    # objects = UserManager()
 
     def __str__(self):
         return ' {} {}'.format(self.first_name, self.last_name)
 
+    def clean(self):
+        if self.password != self.confirm:
+            raise ValidationError({'password': _('Your passwords don''t match')})
+            
 class GoalManager(models.Manager):
     def goal_validator(self, reqPOST):
         errors = {}

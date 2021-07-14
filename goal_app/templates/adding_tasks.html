@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+
+</head>
+
+<body>
+    <div>
+        <h1>Welcome {{current_user.first_name}} {{current_user.last_name}}!!!</h1>
+        <a href="/logout">Logout</a>
+        <a href="/homepage">Home</a>
+
+        <!-- <form action="/editprofile">
+            {% csrf_token %}
+        <button>profile head</button>
+        </form> -->
+    </div>
+    <div>
+        <!--todo add span to group-->
+        <h3>Add tasks for {{goals.goal}} for 2021</h3>
+
+        <h4>Existing Tasks</h4>
+        <div>
+            <ul>
+                {% for onetask in tasks %}
+                {% if current_user.id == user.added_by.id %}
+                    <li>{{ onetask.task }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+
+        <!--TODO add list of existing tasks to goal-->
+        <form action="/{{goals.id}}/addtasks" method="POST">
+            {% csrf_token %}
+            <div class=" form-group">
+                <label for="task">task 1</label>
+                <input type="text" name="task" value="">
+            </div>
+            <button>add task</button>
+
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Goal</th>
+                    <th>Start Date</th>
+                    <th>Goal Date</th>
+                    <th>Update Goal Status </th>
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+    <a href="/setgoal">Add a new goal</a> <a href="/viewgoals">View your goals</a>
+    <div>
+        <h3>Daily tasks</h3>
+    </div>
+
+</body>
+
+</html>

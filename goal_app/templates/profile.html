@@ -1,4 +1,4 @@
-
+<!-- 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +9,7 @@
     <title>Edit Profile</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
@@ -17,7 +17,7 @@
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-    </script>
+    </script> -->
     {% load static %}
     <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
 
@@ -30,9 +30,41 @@
         <h3>Edit your information</h3>
         <a href="/homepage">Home</a> 
         <a href="/logout">Logout</a>
-        <form class="" action="/updateprofile" method="post">
-            {% csrf_token %}
-            {{ regForm.as_p }} create a new form to update profile info but this is extra
-            <input type="submit" value="Update info">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form class="" action="/{{user_id}}/updateprofile" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input name="first_name" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input name="last_name" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input name="email" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input name="password" type="password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm">Confirm Password</label>
+                    <input name="confirm" type="password">
+                </div>
+                <div class="form_group">
+                    <button class="btn btn-primary" type="submit">update</button>
+                </div>
+            </form>
+        </div>
+
+            <!-- <input type="submit" value="Update info"> -->
         </form>
-    </div>
+    </div> -->

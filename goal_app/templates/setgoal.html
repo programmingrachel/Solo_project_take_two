@@ -36,7 +36,7 @@
     </ul>
     {% endif %}
     <div class="row">
-        <div class="col-5">
+        <div class="col-2">
             <form action="/create_goal" method="POST">
                 {% csrf_token %}
                 <div class=" form-group">
@@ -63,40 +63,44 @@
         </div>
         </form>
     </div>
-    <div class="col-5">
+    <div class="col-2">
         <p>Make a list of 3 things that you could to today to reach this goal</p>
-        <form action="/create_task" method="POST">
+        <form action="/{{task.id}}/add_task_to_goal" method="POST">
             {% csrf_token %}
             <div class=" form-group">
-                <label for="task"></label>
+                <label for="task">task 1</label>
                 <input type="text" name="task" value="">
             </div>
             <div class=" form-group">
-                <label for="task"></label>
+                <label for="task">task 2</label>
                 <input type="text" name="task" value="">
             </div>
             <div class=" form-group">
-                <label for="task"></label>
+                <label for="task">Task 3</label>
                 <input type="text" name="task" value="">
-            </div>                
+            </div>
             <div class=" form-group">
-                <label for="">Select goal</label>
-                <select id="" name="goal">
-                    {% for goal in goals %}
-                        {% if current_user.id == goal.added_by.id %}
-                    <option value="{{goal.goal.id}}">{{ goal.goal.id }}</option>
-                        {% endif %}
-                </select>
-                <!-- <input type="submit"> -->
+                <label for="task">Task 4</label>
+                <input type="text" name="task" value="">
+            </div> 
+            <div>
+                <ul>
+                    {% for onetask in tasks %}
+                        <!-- <li>% if current_user.id == task.added_to_goal %</li> -->
+                    <li>{{ onetask.task }}</li>
+                        
                 {% endfor %}
-            <button type="submit">Add Tasks</button>
+                <li>this is where i'm trying to loop through</li>
+            </ul>
+            </div>
+            <button>add task</button>
         </div>
-    </form>
+        </form>
     </div>
     <p>repeat this step daily</p>
     </div>
     <h3>this area is designated for api to generate random inspirational quotes</h3>
-    <!-- </div> -->
+    </div>
 </body>
 
 </html>

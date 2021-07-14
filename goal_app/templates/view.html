@@ -56,7 +56,7 @@
             {% for task in tasks %}
                 {% if current_user.id == task.goal_setter.id %}
                 <h4>Task</h4>
-                <p>{{task.task}} <h4>to get to this</h4> {{task.added_to_goal}}</p>
+                <p>{{task.task}}  {{task.added_to_goal}}</p>
                 <p></p>
                 {% endif %}
             {% endfor %}

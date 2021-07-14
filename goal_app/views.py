@@ -2,28 +2,53 @@ from django.shortcuts import redirect, render, HttpResponse
 import bcrypt
 from django.contrib import messages
 from .models import *
+from .forms import GoalForm, RegisterForm, LoginForm, GoalForm
 
 
 def index(request):
-    return render(request, 'login.html')
+    if request.method == "POST":
+        bound_form = RegisterForm(request.POST)
+        if bound_form.is_valid():
+            # post = bound_form.save(commit=False)
+            user = bound_form.save()
+            request.session['user_id'] = user.id
+            #return HttpResponse("success")
+            return redirect('/homepage')
+        else:
+            return render(request,"logincopy.html",{'form': bound_form})
+    else:
+        form = RegisterForm(None)
+        return render(request,"logincopy.html",{"form": form})
 
 
 def create_user(request):
     if request.method == "POST":
-        errors = User.objects.user_validator(request.POST)
-        if len(errors) > 0:
-            for key, value in errors.items():
-                messages.error(request, value)
-            return redirect('/')
-        else:
-            password = request.POST['password']
-            pw_hash = bcrypt.hashpw(
-                password.encode(), bcrypt.gensalt()).decode()
-            user = User.objects.create(
-                first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=pw_hash)
+        bound_form = RegisterForm(request.POST)
+        if bound_form.is_valid():
+            post = bound_form.save(commit=False)
+            user = post.save()
             request.session['user_id'] = user.id
+            # return HttpResponse("success")
             return redirect('/homepage')
-    return redirect('/')
+        else:
+            return render(request,'/',{'form':bound_form})
+    else:
+        form = RegisterForm(None)
+        return render(request,'/',{"form":form})
+        # errors = User.objects.user_validator(request.POST)
+        # if len(errors) > 0:
+        #     for key, value in errors.items():
+        #         messages.error(request, value)
+        #     return redirect('/')
+        # else:
+        #     password = request.POST['password']
+        #     pw_hash = bcrypt.hashpw(
+        #         password.encode(), bcrypt.gensalt()).decode()
+        #     user = User.objects.create(
+        #         first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=pw_hash)
+        #     request.session['user_id'] = user.id
+    return redirect('/homepage')
+    # return redirect('/')
 
 
 def login(request):
@@ -43,8 +68,8 @@ def home(request):
         return redirect('/')
     context = {
         'current_user': User.objects.get(id=request.session['user_id']),
-        'goals': Goal.objects.all()
-        # 'added_wishes': Wish_added.objects.filter(added_by__id=request.session['user_id'])
+        'goals': Goal.objects.all(),
+        'tasks': Task.objects.all()
     }
     return render(request, 'home.html', context)
 
@@ -53,6 +78,7 @@ def home(request):
 def setgoal(request):
     context= {
         'current_user': User.objects.get(id=request.session['user_id']),
+                'tasks': Task.objects.all()
     }
     return render(request,"setgoal.html",context)
 
@@ -78,24 +104,47 @@ def create_goal(request):
             
             return redirect('/homepage')
 
-def create_task(request):
+def add_task_to_goal(request, task_id):
+    to_update = Task.objects.get(id=task_id)
+    tasks = Task.objects.create(
+        # wish=to_update.wish,
+        # desc=to_update.desc,
+        # wisher=to_update.wisher,
+        added_to_goal=Goal.objects.get(id=request.session['goal_id']))
+        # created_at=to_update.created_at)
+    # to_delete = Wish.objects.get(id=wish_id)
+    # to_delete.delete()
+    return redirect('/setgoal')
+
+def add_tasks_to_goal(request, goal_id):
     if request.method == "POST":
-        errors = Task.objects.task_validator(request.POST)
-        context= {
-        'current_user': User.objects.get(id=request.session['user_id']),
-                'goals': Goal.objects.all()
-        }
+        errors = {}  #TODO take this out
+        # errors = Task.objects.task_validator(request.POST)
+        # context= {
+        # 'current_user': User.objects.get(id=request.session['user_id']),
+        #         'goals': Goal.objects.all(),
+        #         'tasks': Task.objects.all()
+        # }
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
             return redirect('/setgoal')
         else:
             user = User.objects.get(id=request.session["user_id"])
+            goalinfo = Goal.objects.get(id=goal_id)
             task = Task.objects.create(
                 task=request.POST['task'],
-                added_to_goal=Goal.objects.get(id=request.session['user_id'])
+                goal_setter=user,
+                added_to_goal=goalinfo
                 )
-            return redirect('/homepage', context)
+
+    context = {
+        'goals' : Goal.objects.get(id=goal_id),
+        'tasks': Task.objects.filter(added_to_goal__id=goal_id)
+    }
+    return render(request,"adding_tasks.html", context) 
+
+
 def goals(request):
     context= {
         'current_user': User.objects.get(id=request.session['user_id']),
@@ -132,6 +181,31 @@ def delete(request, goal_id):
     to_delete = Goal.objects.get(id=goal_id)
     to_delete.delete()
     return redirect('/homepage')
+
+def updateprofile(request, user_id):
+    pass
+    # if request.method == "POST":
+    #         errors = User.objects.user_validator(request.POST)
+    #         if len(errors) > 0:
+    #             for key, value in errors.items():
+    #                 messages.error(request, value)
+    #             return redirect(f'/{user_id}/updateprofile')
+    #         else:
+    #             password = request.POST['password']
+    #             pw_hash = bcrypt.hashpw(
+    #                 password.encode(), bcrypt.gensalt()).decode()
+    #             to_update = User.objects.get(id=user_id)
+    #             to_update.first_name = request.POST['first_name']
+    #             to_update.last_name = request.POST['last_name']
+    #             to_update.email=request.POST['email']
+    #             to_update.password=request.POST['password']
+    #             to_update.confirm=request.POST['confirm']
+    #             to_update.save()
+
+    # return redirect(f'/{user_id}/updateprofile')
+
+# return redirect('/homepage')
+
 
 
 

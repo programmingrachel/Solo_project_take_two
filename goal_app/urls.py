@@ -2,18 +2,23 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-path('', views.index),
-path('user/create',views.create_user),
-path('users/login',views.login),
+path('', views.index, name="index"),
+path('user/create',views.create_user),  #don't need this
+path('users/login',views.login),    #this should be a separate page
 path('homepage',views.home),
 path('setgoal',views.setgoal),
 path('create_goal',views.create_goal),
-path('create_task',views.create_task),
+path('<int:task_id>/add_task_to_goal',views.add_task_to_goal),
 path('<int:goal_id>/editgoal',views.editgoal),
 path('<int:goal_id>/update',views.updategoal),
 path('<int:goal_id>/delete',views.delete),
+path('<int:user_id>/updateprofile',views.updateprofile),
 path('viewgoals',views.goals),
 path('editprofile',views.editprofile),
-path('logout',views.logout)
 
+path('<int:goal_id>/addtasks',views.add_tasks_to_goal),
+
+
+path('addtasks',views.add_tasks_to_goal),
+path('logout',views.logout)
 ]

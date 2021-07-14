@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,86 +6,83 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
-    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
 
 </head>
 
 <body>
-    <div class="wrapper">
-        <h1>Welcome to Goal Getter!! Login to set goals</h1>
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+    <div class="container-md">
+        <h1 class="header">Welcome to Goal Getter!! Login to set goals</h1>
+        <div class="messages">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
         <div class="row">
-            <div class="col-5">
+            <div class="col form-floating mb-3">
                 <h1>Register</h1>
 
                 <!-- Registration info goes here: -->
                 <form action="/user/create" method='POST'>
                     {% csrf_token %}
-                    <div class="form-group">
+                    <!-- {{ regForm.as_p}} -->
+                    <div class="col-form-label-lg">
                         <label for="first_name">First Name</label>
                         <input name="first_name" type="text">
                     </div>
-                    <div class="form-group">
+                    <div class="col-form-label-lg">
                         <label for="last_name">Last Name</label>
                         <input name="last_name" type="text">
                     </div>
-                    <div class="form-group">
+                    <div class="col-form-label-lg">
                         <label for="email">Email</label>
                         <input name="email" type="text">
                     </div>
-                    <div class="form-group">
+                    <div class="col-form-label-lg">
                         <label for="password">Password</label>
                         <input name="password" type="password">
                     </div>
-                    <div class="form-group">
+                    <div class="col-form-label-lg">
                         <label for="confirm">Confirm Password</label>
                         <input name="confirm" type="password">
                     </div>
-                    <div class="form_group">
+                    <div class="col-form-label-lg">
                         <button class="btn btn-primary" type="submit">Register</button>
                     </div>
                 </form>
             </div>
 
-            <div class="col-5">
+            <div class="col form-floating mb-3">
                 <h1>Log In</h1>
                 <!-- Login info goes here: -->
-                <form action="users/login" method="POST">
+                <form action="/users/login" method="POST">
                     {% csrf_token %}
-                    <div class="form-group">
+                    <!-- {{ loginForm.as_p}} -->
+                    <div class="col-form-label-lg">
                         <label for="email">Email</label>
                         <input name="email" type="text">
                     </div>
-                    <div class="form-group">
+                    <div class="col-form-label-lg">
                         <label for="password">Password</label>
                         <input name="password" type="password">
                     </div>
-                    <div class="form-group">
+                    <div class="col-form-label-lg">
                         <button class="btn btn-primary" type="submit">Log In</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
