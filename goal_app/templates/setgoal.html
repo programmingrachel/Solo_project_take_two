@@ -1,3 +1,6 @@
+{% load bootstrap4 %}
+{% bootstrap_messages %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,100 +9,111 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Set Goals</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-        </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-        </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-        </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
     {% load static %}
-    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
 
 </head>
 
 <body>
-    <div>
-        <h1>Hey {{current_user.first_name}}! Lets set some goals</h1>
-        <a href="/homepage">Home</a>
-        <a href="/logout">Logout</a>
-    </div>
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <div class="row">
-        <div class="col-2">
-            <form action="/create_goal" method="POST">
+    <div class="container-lg">
+        <div class="row col-12 ">
+            <div class="navbar navbar-expand-lg navbar-light bg-light ">
+                <h1>Hey {{current_user.first_name}}! Lets set some goals</h1>
+            </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="btn btn-outline-secondary" href="/homepage">Home</a>
+                <a class="btn btn-outline-secondary" href="/logout">Logout</a>
+            </nav>
+        </div>
+        <!-- <div class="messages">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+        </div> -->
+        <div class="row">
+            <div class="col-6">
+                <form action="/create_goal" method="POST">
+                    {% csrf_token %}
+                    <div class=" form-group">
+                        <label for="goal">Goal</label>
+                        <input type="text" name="goal" value="">
+                    </div>
+                    <div class=" form-group">
+                        <label for="why">Why is this goal important to you</label>
+                        <input type="text" name="why" value="">
+                    </div>
+                    <div class=" form-group">
+                        <label for="short">What is your short term goal?</label>
+                        <input type="text" name="short" value="">
+                    </div>
+                    <div class=" form-group">
+                        <label for="starttime">Start Date</label>
+                        <input type="date" name="starttime" id="" required>
+                    </div>
+                    <div class=" form-group">
+                        <label for="target_date">Target Date</label>
+                        <input type="date" name="target_date" id="" required>
+                    </div>
+                    <button class="btn btn-primary">Set Goal</button>
+            </div>
+            </form>
+        </div>
+        <div class="col-6">
+            <p>Make a list of 3 things that you could to today to reach this goal</p>
+            <form action="/{{task.id}}/add_task_to_goal" method="POST">
                 {% csrf_token %}
                 <div class=" form-group">
-                    <label for="goal">Goal</label>
-                    <input type="text" name="goal" value="">
+                    <label for="task">Task 1</label>
+                    <input type="text" name="task" value="">
                 </div>
                 <div class=" form-group">
-                    <label for="why">Why is this goal important to you</label>
-                    <input type="text" name="why" value="">
+                    <label for="task">Task 2</label>
+                    <input type="text" name="task" value="">
                 </div>
                 <div class=" form-group">
-                    <label for="short">What is your short term goal?</label>
-                    <input type="text" name="short" value="">
+                    <label for="task">Task 3</label>
+                    <input type="text" name="task" value="">
                 </div>
                 <div class=" form-group">
-                    <label for="starttime">Start Date</label>
-                    <input type="date" name="starttime" id="" required>
+                    <label for="task">Task 4</label>
+                    <input type="text" name="task" value="">
                 </div>
-                <div class=" form-group">
-                    <label for="target_date">Target Date</label>
-                    <input type="date" name="target_date" id="" required>
-                </div>
-                <button class="btn btn-primary">Set Goal</button>
-        </div>
-        </form>
-    </div>
-    <div class="col-2">
-        <p>Make a list of 3 things that you could to today to reach this goal</p>
-        <form action="/{{task.id}}/add_task_to_goal" method="POST">
-            {% csrf_token %}
-            <div class=" form-group">
-                <label for="task">task 1</label>
-                <input type="text" name="task" value="">
-            </div>
-            <div class=" form-group">
-                <label for="task">task 2</label>
-                <input type="text" name="task" value="">
-            </div>
-            <div class=" form-group">
-                <label for="task">Task 3</label>
-                <input type="text" name="task" value="">
-            </div>
-            <div class=" form-group">
-                <label for="task">Task 4</label>
-                <input type="text" name="task" value="">
-            </div> 
-            <div>
-                <ul>
-                    {% for onetask in tasks %}
-                        <!-- <li>% if current_user.id == task.added_to_goal %</li> -->
-                    <li>{{ onetask.task }}</li>
-                        
-                {% endfor %}
-                <li>this is where i'm trying to loop through</li>
-            </ul>
-            </div>
-            <button>add task</button>
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="inputStatus">Task for which goal?</label>
+                        <select id="question-subject" class="form-control-sm custom-select">
+                            <option selected disabled>Choose a Goal</option>
+                            {% for goal in goals %}
+                            <option value="{{subject.id}}">{{goal.goal}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            
+                <button>add task</button>
         </div>
         </form>
     </div>
     <p>repeat this step daily</p>
     </div>
     <h3>this area is designated for api to generate random inspirational quotes</h3>
+    </div>
+    </div>
     </div>
 </body>
 

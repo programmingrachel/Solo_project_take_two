@@ -31,3 +31,60 @@ def create_task(request):
                 added_to_goal=Goal.objects.get(id=request.session['user_id'])
                 )
             return redirect('/homepage', context)
+
+def index(request):
+    if request.method == "POST":
+        bound_form = RegisterForm(request.POST)
+        if bound_form.is_valid():
+            # post = bound_form.save(commit=False)
+            user = bound_form.save()
+            request.session['user_id'] = user.id
+            #return HttpResponse("success")
+            return redirect('/homepage')
+        else:
+            return render(request,"logincopy.html",{'form': bound_form})
+    else:
+        form = RegisterForm(None)
+        return render(request,"logincopy.html",{"form": form})
+
+def create_user(request):
+    if request.method == "POST":
+        bound_form = RegisterForm(request.POST)
+        if bound_form.is_valid():
+            post = bound_form.save(commit=False)
+            user = post.save()
+            request.session['user_id'] = user.id
+            # return HttpResponse("success")
+            return redirect('/homepage')
+        else:
+            return render(request,'/',{'form':bound_form})
+    else:
+        form = RegisterForm(None)
+        return render(request,'/',{"form":form})
+        # errors = User.objects.user_validator(request.POST)
+        # if len(errors) > 0:
+        #     for key, value in errors.items():
+        #         messages.error(request, value)
+        #     return redirect('/')
+        # else:
+        #     password = request.POST['password']
+        #     pw_hash = bcrypt.hashpw(
+        #         password.encode(), bcrypt.gensalt()).decode()
+        #     user = User.objects.create(
+        #         first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=pw_hash)
+        #     request.session['user_id'] = user.id
+    return redirect('/homepage')
+    # return redirect('/')
+
+<a href="/{{goal.id}}/addtasks"class="btn btn-secondary">tasks</a>
+
+                            <div>
+                                <ul>
+                                    {% for onetask in tasks %}
+                                    <li>{% if current_user.id == user.added_by.id %}</li>
+                                        <li>{{ onetask.task }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <li>this is where i'm trying to loop through</li>
+                                </ul>
+                            </div>

@@ -1,10 +1,4 @@
-
-
-.container-md{
-    background-image: blue;
-}
-
-.messages {
-    color: red;
-
-}
+body {background-color:#eee;}
+.container-fluid {padding:50px;}
+.container{background-color:white;padding:50px;   }
+#title{font-family: 'Lobster', cursive; color: #0069D9;}

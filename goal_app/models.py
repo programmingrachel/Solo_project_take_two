@@ -14,6 +14,16 @@ def validateLengthGreaterThanTwo(value):
         raise ValidationError(
             '{} must be longer than: 2'.format(value)
         )
+def emailvalidator(value):
+    EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$'),
+    # users_with_email = User.objects.filter(email=reqPOST['email'])
+
+    if not EMAIL_REGEX(value):    # test whether a field matches the pattern
+        if len(value) >= 1:
+            raise ValidationError('{} Invalid email address!'.format(value),'{} Email already in use'.format(value))
+
+
+
 
 class UserManager(models.Manager):
     def user_validator(self, reqPOST):
@@ -38,22 +48,24 @@ class UserManager(models.Manager):
         return errors
 
 class User(models.Model):
-    first_name = models.CharField(max_length=255,validators=[validators.MinLengthValidator(5,"First name too short"),firstCapitalLetter,])
-    last_name = models.CharField(max_length=255, validators= [validators.MinLengthValidator(5,"Last name too short"),])
+    # first_name = models.CharField(max_length=255,validators=[validators.MinLengthValidator(5,"First name too short"),firstCapitalLetter,])
+    # last_name = models.CharField(max_length=255, validators= [validators.MinLengthValidator(5,"Last name too short"),])
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=150)
     password = models.CharField(max_length=25)
     confirm = models.CharField(max_length=25)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # objects = UserManager()
+    objects = UserManager()
 
     def __str__(self):
         return ' {} {}'.format(self.first_name, self.last_name)
 
-    def clean(self):
-        if self.password != self.confirm:
-            raise ValidationError({'password': _('Your passwords don''t match')})
-            
+    # def clean(self):
+    #     if self.password != self.confirm:
+    #         raise ValidationError({'password': _('Your passwords don''t match')})
+
 class GoalManager(models.Manager):
     def goal_validator(self, reqPOST):
         errors = {}
