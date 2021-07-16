@@ -30,13 +30,6 @@
         <h3>Edit your information</h3>
         <a href="/homepage">Home</a> 
         <a href="/logout">Logout</a>
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
         <form class="" action="/{{user_id}}/updateprofile" method="POST">
                 {% csrf_token %}
                 <div class="form-group">

@@ -43,7 +43,7 @@
         <form action="/{{goals.id}}/addtasks" method="POST">
             {% csrf_token %}
             <div class=" form-group">
-                <label for="task">task 1</label>
+                <label for="task" placeholder="entertask here"></label>
                 <input type="text" name="task" value="">
             </div>
             <button>add task</button>

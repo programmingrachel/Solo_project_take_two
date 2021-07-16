@@ -1,4 +1,4 @@
-body {background-color:#eee;}
+body {background-color:#6E8891; background-image: url(../css/img/img1.jpg);background-size: cover;}
 .container-fluid {padding:50px;}
-.container{background-color:white;padding:50px;   }
-#title{font-family: 'Lobster', cursive; color: #0069D9;}
+.container{padding:50px;   }
+#title{font-family: 'Lobster', cursive; color: #043756;}

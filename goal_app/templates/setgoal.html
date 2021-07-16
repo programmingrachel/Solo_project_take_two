@@ -36,15 +36,6 @@
                 <a class="btn btn-outline-secondary" href="/logout">Logout</a>
             </nav>
         </div>
-        <!-- <div class="messages">
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                    {% endfor %}
-            </ul>
-            {% endif %}
-        </div> -->
         <div class="row">
             <div class="col-6">
                 <form action="/create_goal" method="POST">
@@ -75,7 +66,7 @@
         </div>
         <div class="col-6">
             <p>Make a list of 3 things that you could to today to reach this goal</p>
-            <form action="/{{task.id}}/add_task_to_goal" method="POST">
+            <form action="/{{task.id}}/add_tasks_to_goal" method="POST">
                 {% csrf_token %}
                 <div class=" form-group">
                     <label for="task">Task 1</label>
@@ -93,17 +84,6 @@
                     <label for="task">Task 4</label>
                     <input type="text" name="task" value="">
                 </div>
-                {% csrf_token %}
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="inputStatus">Task for which goal?</label>
-                        <select id="question-subject" class="form-control-sm custom-select">
-                            <option selected disabled>Choose a Goal</option>
-                            {% for goal in goals %}
-                            <option value="{{subject.id}}">{{goal.goal}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
             
                 <button>add task</button>
         </div>

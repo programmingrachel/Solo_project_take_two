@@ -1,9 +1,10 @@
+from django.db.models.query import RawQuerySet
 from django.shortcuts import redirect, render, HttpResponse
 import bcrypt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import *
-from .forms import GoalForm, RegisterForm, LoginForm
+from .forms import GoalForm, RegisterForm, LoginForm,TaskForm
 
 
 def index(request):
@@ -46,12 +47,11 @@ def home(request):
     context = {
         'current_user': User.objects.get(id=request.session['user_id']),
         'goals': Goal.objects.all(),
-        'tasks': Task.objects.all()
+        'tasks': Task.objects.all(),
     }
-    return render(request, 'home.html', context)
+    form = TaskForm(request.POST)
 
-    # return render(request, "home.html")
-
+    return render(request, 'home.html', context, {'form': form})
 
 def setgoal(request):
     context = {
@@ -60,7 +60,6 @@ def setgoal(request):
         'tasks': Task.objects.all()
     }
     return render(request, "setgoal.html", context)
-
 
 def create_goal(request):
     if request.method == "POST":
@@ -81,26 +80,31 @@ def create_goal(request):
                 start_date=request.POST['starttime'],
                 target_date=request.POST['target_date'],
                 added_by=User.objects.get(id=request.session['user_id']))
-
             return redirect('/homepage')
 
 
-def add_task_to_goal(request, task_id):
-    to_update = Task.objects.get(id=task_id)
-    tasks = Task.objects.create(
-        # wish=to_update.wish,
-        # desc=to_update.desc,
-        # wisher=to_update.wisher,
-        added_to_goal=Goal.objects.get(id=request.session['goal_id']))
-    # created_at=to_update.created_at)
-    # to_delete = Wish.objects.get(id=wish_id)
-    # to_delete.delete()
-    return redirect('/setgoal')
+# def add_task_to_goal(request, task_id):
+#     to_update = Task.objects.get(id=task_id)
+#     tasks = Task.objects.create(
+#     added_to_goal=Goal.objects.get(id=request.session['goal_id']))
+#     # created_at=to_update.created_at)
+#     # to_delete = Wish.objects.get(id=wish_id)
+#     # to_delete.delete()
+#     return redirect('/setgoal')
+
+# def task_completed(request, task_id):
+#     complete = Task.objects.get(id=task_id)
+#     task = Task.objects.create(
+#         task =complete.task,
+#         goal = complete.added_to_goal,
+#         added_by = User.objects.get(id=request.session['user_id']))
+
+#     return redirect('/homepage')
 
 
 def add_tasks_to_goal(request, goal_id):
     if request.method == "POST":
-        errors = {}  # TODO take this out
+        errors = {}  # todo take this out
         # errors = Task.objects.task_validator(request.POST)
         # context= {
         # 'current_user': User.objects.get(id=request.session['user_id']),
@@ -114,12 +118,11 @@ def add_tasks_to_goal(request, goal_id):
         else:
             user = User.objects.get(id=request.session["user_id"])
             goalinfo = Goal.objects.get(id=goal_id)
-            task = Task.objects.create(
+            new_task = Task.objects.create(
                 task=request.POST['task'],
                 goal_setter=user,
                 added_to_goal=goalinfo
             )
-
     context = {
         'goals': Goal.objects.get(id=goal_id),
         'tasks': Task.objects.filter(added_to_goal__id=goal_id)
@@ -185,8 +188,6 @@ def updateprofile(request, user_id):
             to_update.password = request.POST['password']
             to_update.confirm = request.POST['confirm']
             to_update.save()
-
-        return redirect(f'/{user_id}/updateprofile')
     return redirect('/homepage')
 
 

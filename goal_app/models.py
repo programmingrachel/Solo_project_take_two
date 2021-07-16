@@ -1,6 +1,8 @@
 from os import error
 from django.db import models
 import re
+
+from django.forms.widgets import CheckboxSelectMultiple
 import bcrypt
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -101,6 +103,7 @@ class Task(models.Model):
     task=models.CharField(max_length=100)
     goal_setter=models.ForeignKey(User, related_name="made_goal", on_delete=models.CASCADE,null= True)
     added_to_goal = models.ForeignKey(Goal, related_name="task_for_goal", on_delete=models.CASCADE,null= True)
+    completed_task= models.BooleanField(default=False, null=True )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects=TaskManager()

@@ -88,3 +88,15 @@ def create_user(request):
                                     <li>this is where i'm trying to loop through</li>
                                 </ul>
                             </div>
+                 This is for dropdown select           
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="inputStatus">Task for which goal?</label>
+                        <select id="question-subject" class="form-control-sm custom-select">
+                            <option selected disabled>Choose a Goal</option>
+                            {% for goal in goals %}
+                            <option value="{{subject.id}}">{{goal.goal}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
