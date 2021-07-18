@@ -100,3 +100,25 @@ def create_user(request):
                             {% endfor %}
                         </select>
                     </div>
+
+            this is working code for looping and displaying each individual goal
+            <div class="row">
+                <h4>Goals for 2021</h4>
+                <div>
+                    
+                        {% for goal in goals %}
+                        {% if current_user.id == goal.added_by.id %}
+                        <h4>Goal</h4>
+                        <p>{{goal.goal}}</p>
+                        <h4>Why is this goal important to you?</h4>
+                        <p>{{goal.desc}}</p>
+                        <h4>What is your short term goal?</h4> 
+                        <p>{{goal.short_term}}</p>
+                        <h4>Your start and end dates</h4>
+                        <p>{{goal.start_date}} {{goal.target_date}}</p>
+                        <a href="{{goal.id}}/editgoal">Edit this Goal</a>
+                        <a href="/setgoal"> Set a new goal</a>
+                        {% endif %}
+                    <!-- <p>start date </p>insert calender here <p>Target Date insert calender here</p> -->
+                </div>{% endfor %}
+            </div>

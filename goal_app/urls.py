@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
 path('', views.index, name="index"),
+path('samplehome',views.samplehome),
+path('samplegoals',views.samplegoals),
 path('user/create',views.create_user),  #don't need this
 path('users/login',views.login),    #this should be a separate page
 path('homepage',views.home),

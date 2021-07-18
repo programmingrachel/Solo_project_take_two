@@ -25,10 +25,21 @@ SECRET_KEY = 'cff)ov9+^+$at!2y5y@oy)e=(zn%#ftl44x%we7u7y4wtf4s5u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
+#ALLOWED_HOSTS = []
+# OPTION A: https://dzone.com/articles/how-to-fix-django-cors-error
+ALLOWED_HOSTS=['*']
+CORS_ORIGIN_ALLOW_ALL = True
 
-# Application definition
+# OPTION B
+# ALLOWED_HOSTS = []
+# CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+    'https://zenquotes.io',
+)
+# Application definit
 
 INSTALLED_APPS = [
     'goal_app',
@@ -39,7 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "bootstrap4",
-    'crispy_forms',
+    "crispy_forms",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -50,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'Solo_Proj.urls'

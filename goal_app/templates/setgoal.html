@@ -20,81 +20,83 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-    {% load static %}
-    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 
 </head>
 
 <body>
-    <div class="container-lg">
-        <div class="row col-12 ">
-            <div class="navbar navbar-expand-lg navbar-light bg-light ">
-                <h1>Hey {{current_user.first_name}}! Lets set some goals</h1>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row col-12 ">
+                <h1 class="text-center" id="title" >Hey {{current_user.first_name}}! Lets set some goals</h1>
+                <div class="navbar navbar-expand-lg  ">
+                <nav class="navbar">
+                    <a class="btn btn-outline-light" href="/homepage">Home </a> 
+                    <a class="btn btn-outline-light" href="/logout">Logout</a>
+                </nav>
+
             </div>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="btn btn-outline-secondary" href="/homepage">Home</a>
-                <a class="btn btn-outline-secondary" href="/logout">Logout</a>
-            </nav>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <form action="/create_goal" method="POST">
-                    {% csrf_token %}
-                    <div class=" form-group">
-                        <label for="goal">Goal</label>
-                        <input type="text" name="goal" value="">
-                    </div>
-                    <div class=" form-group">
-                        <label for="why">Why is this goal important to you</label>
-                        <input type="text" name="why" value="">
-                    </div>
-                    <div class=" form-group">
-                        <label for="short">What is your short term goal?</label>
-                        <input type="text" name="short" value="">
-                    </div>
-                    <div class=" form-group">
-                        <label for="starttime">Start Date</label>
-                        <input type="date" name="starttime" id="" required>
-                    </div>
-                    <div class=" form-group">
-                        <label for="target_date">Target Date</label>
-                        <input type="date" name="target_date" id="" required>
-                    </div>
-                    <button class="btn btn-primary">Set Goal</button>
+            <div class="container">
+                <div class="col-10">
+                    <form action="/create_goal" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="Goal" class="form-label">Goal</label>
+                            <input type="text" name="goal" class="form-control" id="Goal"
+                            placeholder="What is your goal?">
+                        </div>
+                        <div class="mb-3">
+                            <label for="why" class="form-label"> Why?</label>
+                            <input type="text" name="why" class="form-control" id="why"
+                                placeholder="Why is this goal important to you?">
+                        </div>
+                        <div class="mb-3">
+                            <label for="short" class="form-label"> Short term goal</label>
+                            <input type="text" name="short" class="form-control" id="short"
+                                placeholder="Tell me your short term goal">
+                        </div>
+                        <div class=" form-group">
+                            <label for="starttime">Start Date</label>
+                            <input type="date" min="2021-7-16" name="starttime" id="" required/>
+                            <label for="target_date">Target Date</label>
+                            <input type="date" name="target_date" id="" required>
+                        </div>
+                        <button class="btn btn-light ">Set Goal</button>
+
+                    </form>
+                    <!-- <img class="box-shadow-sm" id= "img-login"src="{% static 'css/img/giphy.gif' %}" alt=""> -->
+
+                </div>
             </div>
-            </form>
         </div>
-        <div class="col-6">
-            <p>Make a list of 3 things that you could to today to reach this goal</p>
-            <form action="/{{task.id}}/add_tasks_to_goal" method="POST">
-                {% csrf_token %}
-                <div class=" form-group">
-                    <label for="task">Task 1</label>
-                    <input type="text" name="task" value="">
-                </div>
-                <div class=" form-group">
-                    <label for="task">Task 2</label>
-                    <input type="text" name="task" value="">
-                </div>
-                <div class=" form-group">
-                    <label for="task">Task 3</label>
-                    <input type="text" name="task" value="">
-                </div>
-                <div class=" form-group">
-                    <label for="task">Task 4</label>
-                    <input type="text" name="task" value="">
-                </div>
-            
-                <button>add task</button>
-        </div>
-        </form>
     </div>
-    <p>repeat this step daily</p>
-    </div>
-    <h3>this area is designated for api to generate random inspirational quotes</h3>
-    </div>
-    </div>
-    </div>
+    <blockquote class="blockquote text-center">
+        <p class="mb-0">        {{ quotes.h|safe}}
+        </p>
+    </blockquote>
+    <!-- <script>
+        const url = 'https://zenquotes.io/api/random';
+        fetch(url,{mode:'no-cors'})
+            .then((response) => response.json())
+            .then(function(data) {
+                let quote = data[0]["q"];
+                let author = data[0]["a"];
+                let htmlquote = data[0]["h"];
+                console.log(htmlquote);
+            })
+
+    </script> -->
+    <!-- <blockquote class="blockquote text-center">
+        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+    </blockquote> -->
+
+
+
 </body>
 
 </html>

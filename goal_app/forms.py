@@ -57,12 +57,9 @@ class GoalForm(forms.Form):
     # start_date = forms.DateInput()
     # target_date = forms.DateInput()
 
-class TaskForm(forms.Form):
-    class Meta:
-        model = User
-        fields = "__all__"
-    task = forms.ModelMultipleChoiceField(
-        widget= forms.CheckboxSelectMultiple,
-        queryset = Task.objects.all(),
-        initial = 0
-    )
+# class TaskForm(forms.ModelForm):
+#     #onetask = forms.BooleanField()
+
+#     class Meta:
+#         model = Task
+        

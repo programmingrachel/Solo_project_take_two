@@ -1,3 +1,6 @@
+{% load bootstrap4 %}
+{% bootstrap_messages %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,31 +20,39 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
         </script>
+            <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+
     {% load static %}
-    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 </head>
 
 <body>
-    <div>
-        <h1>Edit your goal</h1>
-        <a href="/homepage">Home</a>
-        <a href="/logout">Logout</a>
-    </div>
+    <div class="container">
+    <div class="container-fluid">
+        <div class="navbar text-center  ">
+            <nav class="navbar">
+                <h1 id="title">Edit your goal </h1> 
+    
+                <a class="nav-link btn btn-outline-light" href="/homepage">Home </a> 
+                <a class="nav-link btn btn-outline-light" href="/logout">Logout</a>
+            </nav>
+        </div>
+    
 
     <form action="/{{goal.id}}/update" method="POST">
         {% csrf_token %}
         <div class=" form-group">
             <label for="goal">Goal</label>
-            <textarea name="goal" cols="50" rows="3" class="form-control" value="">{{ goal.goal }}</textarea>
+            <textarea name="goal" cols="50" rows="2" class="form-control" value="">{{ goal.goal }}</textarea>
         </div>
         <div class=" form-group">
             <label for="why">Why is this goal important to you</label>
-            <textarea name="why" cols="50" rows="3" class="form-control" value="">{{ goal.desc }}</textarea>
+            <textarea name="why" cols="50" rows="2" class="form-control" value="">{{ goal.desc }}</textarea>
         </div>
         <div class=" form-group">
             <label for="short">What is your short term goal?</label>
-            <textarea name="short" cols="50" rows="3" class="form-control" value="">{{ goal.short_term }}</textarea>
+            <textarea name="short" cols="50" rows="2" class="form-control" value="">{{ goal.short_term }}</textarea>
         </div>
         <div class=" form-group">
             <label for="starttime">Start Date</label>
@@ -50,7 +61,7 @@
             <input type="date" name="target_date" id=""  required>
         </div>
         <div class=" form-group">
-            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-outline-light">Save</button>
         </form>
         <!-- <form action="{{goal.id}}/delete">
             <button class="btn btn-primary">Delete</button>
@@ -59,3 +70,6 @@
     </div>
 
     <div>
+
+    
+</body>

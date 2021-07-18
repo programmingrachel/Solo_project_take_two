@@ -1,3 +1,9 @@
+{% load bootstrap4 %}
+{% bootstrap_messages %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,67 +11,99 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="icon" href="images/icon.png" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
     {% load static %}
-    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 </head>
 
+
 <body>
-    <div>
-        <h1>Welcome {{current_user.first_name}} {{current_user.last_name}}!!!</h1>
-        <a href="/logout">Logout</a>
-        <a href="/homepage">Home</a>
+    <div class="container-fluid">
+        <h1>Hey {{current_user.first_name}} </h1>
+        <div class="row justify-content-end">
+            <a class="btn btn-sm btn-outline-secondary" href="/logout">Logout</a>
+            <a class="btn btn-sm btn-outline-secondary" href="/homepage">Home</a>
+            <a href="/setgoal">Add a new goal</a> <a href="/viewgoals">View your goals</a>
 
-        <!-- <form action="/editprofile">
-            {% csrf_token %}
-        <button>profile head</button>
-        </form> -->
-    </div>
-    <div>
-        <!--todo add span to group-->
-        <h3>Add tasks for {{goals.goal}} for 2021</h3>
-
-        <h4>Existing Tasks</h4>
-        <div>
-            <ul>
-                {% for onetask in tasks %}
-                {% if current_user.id == user.added_by.id %}
-                    <li>{{ onetask.task }}</li>
-                {% endif %}
-                {% endfor %}
-            </ul>
         </div>
+        <div>
+            <!--todo add span to group-->
+            <h3>For this goal <i class="arrow right"></i> {{goals.goal}} we need to add some tasks</h3>
 
-
-        <!--TODO add list of existing tasks to goal-->
-        <form action="/{{goals.id}}/addtasks" method="POST">
-            {% csrf_token %}
-            <div class=" form-group">
-                <label for="task" placeholder="entertask here"></label>
-                <input type="text" name="task" value="">
+            <div>
+                <ul>
+                    {% for onetask in tasks %}
+                    {% if current_user.id == user.added_by.id %}
+                    <li>{{ onetask.task }}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
             </div>
-            <button>add task</button>
 
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>Goal</th>
-                    <th>Start Date</th>
-                    <th>Goal Date</th>
-                    <th>Update Goal Status </th>
-                </tr>
-            </thead>
+            <div id="demo">
+            <!--TODO find out how to add multiple tasks at once-->
+            <form action="/{{goals.id}}/addtasks" method="POST">
+                {% csrf_token %}
+                <div class=" form-group">
+                    <label for="task" placeholder="entertask here"></label>
+                    <input type="text" name="task" value="">
 
-        </table>
+                </div>
+
+
+                <button  >add task</button>
+
+            </form>
+        <div>
+            <h3>Daily tasks</h3>
+            <div class="row" >
+
+                <form action="/homepage" method="POST">
+                    {% csrf_token %}
+                    <div class=" form-group">
+                        <ul>{% for task in tasks %}
+                            <li>{% if current_user.id == task.goal_setter.id %} {{task.task}} {% endif %}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn btn-outline-light">Home</button>
+                    <!-- <a class="btn btn-secondary btn-sm" href="">Completed</a> -->
+                </form>
+            </div>
+            <div >
+            </div>
+
+            <!-- <script>
+                function loadDoc() {
+                    const xhttp = new XMLHttpRequest();
+                    xhttp.onload = function () {
+                        document.getElementById("demo").innerHTML =
+                            this.responseText;
+                    }
+                    xhttp.open("POST", "ajax_info.txt");
+                    xhttp.send();
+                }
+            </script> -->
+
+        </div>
     </div>
-    <a href="/setgoal">Add a new goal</a> <a href="/viewgoals">View your goals</a>
-    <div>
-        <h3>Daily tasks</h3>
-    </div>
-
 </body>
 
 </html>

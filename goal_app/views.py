@@ -1,14 +1,23 @@
 from django.db.models.query import RawQuerySet
+from django.http import response
 from django.shortcuts import redirect, render, HttpResponse
 import bcrypt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import *
-from .forms import GoalForm, RegisterForm, LoginForm,TaskForm
+from .forms import GoalForm, RegisterForm, LoginForm
+import json
+import requests
 
 
 def index(request):
     return render(request, 'login.html')
+
+def samplehome(request):
+    return render(request, 'samplehome.html')
+
+def samplegoals(request):
+    return render(request, 'samplegoals.html')
 
 
 def create_user(request):
@@ -23,7 +32,10 @@ def create_user(request):
             pw_hash = bcrypt.hashpw(
                 password.encode(), bcrypt.gensalt()).decode()
             user = User.objects.create(
-                first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=pw_hash)
+                first_name=request.POST['first_name']
+                , last_name=request.POST['last_name']
+                , email=request.POST['email']
+                , password=pw_hash)
             request.session['user_id'] = user.id
             return redirect('/homepage')
     return redirect('/')
@@ -31,8 +43,9 @@ def create_user(request):
 
 def login(request):
     if request.method == "POST":
-        users_with_email = User.objects.filter(email=request.POST['email'])
-        if users_with_email:
+        if User.objects.filter(email=request.POST['email']).exists():
+            users_with_email = User.objects.filter(email=request.POST['email'])
+        #if users_with_email:
             user = users_with_email[0]
             if bcrypt.checkpw(request.POST['password'].encode(), user.password.encode()):
                 request.session['user_id'] = user.id
@@ -44,20 +57,45 @@ def login(request):
 def home(request):
     if 'user_id' not in request.session:
         return redirect('/')
-    context = {
-        'current_user': User.objects.get(id=request.session['user_id']),
-        'goals': Goal.objects.all(),
-        'tasks': Task.objects.all(),
-    }
-    form = TaskForm(request.POST)
+    user_id = request.session['user_id']
 
-    return render(request, 'home.html', context, {'form': form})
+    if request.method == "POST":
+        # use this to update the tasks that are clicked
+        tasks = Task.objects.filter(added_to_goal__id = user_id, completed_task=False)
+        for item in Task.objects.filter(added_to_goal__id = user_id, completed_task=False): 
+            if request.POST.get("c" + str(item.id)) == "clicked":
+                item.completed_task = True
+                item.save()
+
+    if Goal.objects.filter(added_by__id=user_id).exists():
+        allgoals = Goal.objects.filter(added_by__id=user_id)
+    else:
+        allgoals = None
+    if Task.objects.filter(added_to_goal__id = user_id).exists():
+        alltasks = Task.objects.filter(added_to_goal__id = user_id, completed_task=False)
+    else:
+        alltasks = None
+    context = {
+        'current_user': User.objects.get(id=user_id),
+        'goals': allgoals,
+        'tasks': alltasks,
+    }
+    # if request.method == "POST":
+    #     form = TaskForm(request.POST)
+    # else:
+    #     form = TaskForm(None)
+
+    return render(request, 'home.html', context)
 
 def setgoal(request):
+    quotes = "https://zenquotes.io/api/random"
+    response= requests.get(quotes).json()
+
     context = {
         'goals': Goal.objects.all(),
         'current_user': User.objects.get(id=request.session['user_id']),
-        'tasks': Task.objects.all()
+        'tasks': Task.objects.all(),
+        'quotes': response[0]
     }
     return render(request, "setgoal.html", context)
 
@@ -106,11 +144,6 @@ def add_tasks_to_goal(request, goal_id):
     if request.method == "POST":
         errors = {}  # todo take this out
         # errors = Task.objects.task_validator(request.POST)
-        # context= {
-        # 'current_user': User.objects.get(id=request.session['user_id']),
-        #         'goals': Goal.objects.all(),
-        #         'tasks': Task.objects.all()
-        # }
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
@@ -125,16 +158,22 @@ def add_tasks_to_goal(request, goal_id):
             )
     context = {
         'goals': Goal.objects.get(id=goal_id),
-        'tasks': Task.objects.filter(added_to_goal__id=goal_id)
+        'tasks': Task.objects.filter(added_to_goal__id=goal_id),
+    'current_user': User.objects.get(id=request.session['user_id']),
+
     }
     return render(request, "adding_tasks.html", context)
 
 
 def goals(request):
+    quotes = "https://zenquotes.io/api/random"
+    response= requests.get(quotes).json()
+
     context = {
         'current_user': User.objects.get(id=request.session['user_id']),
         'goals': Goal.objects.all(),
-        'tasks': Task.objects.all()
+        'tasks': Task.objects.all(),
+        'quotes': response[0]
     }
     return render(request, "view.html", context)
 

@@ -1,77 +1,11 @@
+{% load bootstrap4 %}
+{% bootstrap_messages %}
+
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
-<section class="main-content bg-light py-4 mb-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row mb-2">
-                    <div class="col-md-12">
-                        <div class="">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h2>About Us</h2>
-                                        <small>Please find the details below</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                            Title of the text
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                            Title of the text
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                            Title of the text
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                            Title of the text
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                            Title of the text
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -84,57 +18,132 @@
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
         integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-    </script>
-    {% load static %}
-    <link rel="stylesheet" href="{% static '/css/login_reg_style.css' %}">
+        </script>
+            <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
 
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
-    <div>
-        <h1>Hey {{current_user}}, here are your goals for 2021</h1>
-        <a href="/logout">Logout</a>
-        <a href="/homepage">Back</a>
-        <!-- <a href="/setgoal">Set a new Goal</a> -->
-    </div>
-    <div>
-        <h4>Goals for 2021</h4>
-        <div>
-            
-                {% for goal in goals %}
-                {% if current_user.id == goal.added_by.id %}
-                <h4>Goal</h4>
-                <p>{{goal.goal}}</p>
-                <h4>Why is this goal important to you?</h4>
-                <p>{{goal.desc}}</p>
-                <h4>What is your short term goal?</h4> 
-                <p>{{goal.short_term}}</p>
-                <h4>Your start and end dates</h4>
-                <p>{{goal.start_date}} {{goal.target_date}}</p>
-                <a href="{{goal.id}}/editgoal">Edit this Goal</a>
-                <a href="/setgoal"> Set a new goal</a>
-                {% endif %}
-            <!-- <p>start date </p>insert calender here <p>Target Date insert calender here</p> -->
-        </div>{% endfor %}
-    </div>
-    <div>
-        <h1>Way to go! You are making Progress!</h1>
-        <p>Here are a list of tasks you have completed in the last 30 days to get that goal</p>
-        <div>
-            {% for task in tasks %}
-                {% if current_user.id == task.goal_setter.id %}
-                <h4>Task</h4>
-                <p>{{task.task}}  {{task.added_to_goal}}</p>
-                <p></p>
-                {% endif %}
-            {% endfor %}
+    <div class="container">
+    
+        <div class="container-fluid">
+            <!-- <blockquote class="blockquote text-center">
+                <p class="mb-0">        {{ quotes.h|safe}}
+                </p>
+            </blockquote> -->
+    
+            <h1 class="text-center" id="title">Hey {{current_user}}, here are your goals for 2021</h1>
+                <div >
+                    <form action="" >
+                        <a class="btn btn-sm btn-outline-light" href="/logout">Logout</a>
+                        <a class="btn btn-sm btn-outline-light" href="/homepage">Back</a>
+                    </form>
+                </div>
+                
+
+                <section class="main-content  py-4 mb-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <div class="">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h2>Goals for 2021</h2>
+                                                        <small>here are the goals you have set</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        {% for goal in goals %}
+                                        {% if current_user.id == goal.added_by.id %}
+                                        <p>Goal {{goal.id}}</p>
+                                        <div class="card">
+                                            <div class="card-body text-dark">
+                                                {{goal.goal}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12"><small> This is why this is important to you.</small>
+                                        <div class="card">
+                                            <div class="card-body text-dark">
+                                                {{goal.desc}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12"><small>This is your start date and target date</small>
+                                        <div class="card">
+                                            <div class="card-body text-dark">
+                                                {{goal.short_term}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <small>here are the goals you have set</small>
+                                        <div class="card">
+                                            <div class="card-body text-dark">
+                                                {{goal.start_date}} | {{goal.target_date}}
+                                            </div>
+                                        </div>
+                                            <a class="btn btn-sm btn-outline-light" href="{{goal.id}}/editgoal">Edit this Goal</a>
+                                            <a class="btn btn-sm btn-outline-light" href="/setgoal"> Set a new goal</a>
+                                            {% endif %}
+                                            {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            <div class="container" id="task-box">
+                <h1>Way to go! You are making Progress!</h1>
+                <small>Here are a list of tasks you have completed in the last 30 days to get that goal</small>
+                <div class="content">
+                    <h4>Tasks</h4>
+                        {% for task in tasks %}
+                        {% if current_user.id == task.goal_setter.id %}
+                        <ul>
+                            <p>Goal and task completed to get closer to your goal</p>
+                            <li>Goal: <br>
+                                {{task.added_to_goal.goal}} <br>
+                                Task completed: <br> {{task.task}}</li>
+                            <!-- <li>task.task}}</li> -->
+                            {% if task.completed_task %}{% endif %}
+                        </ul>
+
+                        {% endif %}
+                        {% endfor %}
+                    <!-- <p>You still have tasks left to go!!!</p> -->
+                </div>
+            </div>
         </div>
     </div>
-    
+    </div>
+    <blockquote class="blockquote text-center">
+        <p class="mb-0">        {{ quotes.h|safe}}
+        </p>
+    </blockquote>
 </body>
+
 </html>

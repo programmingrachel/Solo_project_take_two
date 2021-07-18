@@ -107,6 +107,7 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects=TaskManager()
+    
     def __str__(self):
         return ' {} {}'.format(self.task, self.goal_setter,self.added_to_goal)
 
