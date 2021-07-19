@@ -75,6 +75,8 @@ class GoalManager(models.Manager):
             errors['goal'] = "goal must have a minimum of 3 characters"
         if len(reqPOST['why']) <3:
             errors['why'] = "Please explain more about why?"
+        # if reqPOST['target_date'] < reqPOST['start_date']:
+        #     errors['target_date'] = "You must enter a target date after the start date."
         return errors 
     
 
@@ -95,7 +97,7 @@ class Goal(models.Model):
 class TaskManager(models.Manager):
     def task_validator(self, reqPOST):
         errors = {}
-        if len(reqPOST['task']) <1:
+        if len(reqPOST['task']) <=0:
             errors['task'] = "Please enter task"
         return errors
     

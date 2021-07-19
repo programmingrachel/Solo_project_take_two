@@ -61,8 +61,8 @@ def home(request):
 
     if request.method == "POST":
         # use this to update the tasks that are clicked
-        tasks = Task.objects.filter(added_to_goal__id = user_id, completed_task=False)
-        for item in Task.objects.filter(added_to_goal__id = user_id, completed_task=False): 
+        tasks = Task.objects.filter(goal_setter__id = user_id, completed_task=False)
+        for item in Task.objects.filter(goal_setter__id = user_id, completed_task=False): 
             if request.POST.get("c" + str(item.id)) == "clicked":
                 item.completed_task = True
                 item.save()
@@ -71,8 +71,8 @@ def home(request):
         allgoals = Goal.objects.filter(added_by__id=user_id)
     else:
         allgoals = None
-    if Task.objects.filter(added_to_goal__id = user_id).exists():
-        alltasks = Task.objects.filter(added_to_goal__id = user_id, completed_task=False)
+    if Task.objects.filter(goal_setter__id = user_id).exists():
+        alltasks = Task.objects.filter(goal_setter__id = user_id,completed_task=False)
     else:
         alltasks = None
     context = {
@@ -143,11 +143,11 @@ def create_goal(request):
 def add_tasks_to_goal(request, goal_id):
     if request.method == "POST":
         errors = {}  # todo take this out
-        # errors = Task.objects.task_validator(request.POST)
+        errors = Task.objects.task_validator(request.POST)
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect('/setgoal')
+            return redirect(f'/{goal_id}/addtasks')
         else:
             user = User.objects.get(id=request.session["user_id"])
             goalinfo = Goal.objects.get(id=goal_id)
@@ -172,7 +172,7 @@ def goals(request):
     context = {
         'current_user': User.objects.get(id=request.session['user_id']),
         'goals': Goal.objects.all(),
-        'tasks': Task.objects.all(),
+        'tasks': Task.objects.filter(completed_task=True).order_by('-updated_at'),
         'quotes': response[0]
     }
     return render(request, "view.html", context)

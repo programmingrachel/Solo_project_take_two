@@ -43,8 +43,8 @@
             <h1 class="text-center" id="title">Hey {{current_user}}, here are your goals for 2021</h1>
                 <div >
                     <form action="" >
-                        <a class="btn btn-sm btn-outline-light" href="/logout">Logout</a>
-                        <a class="btn btn-sm btn-outline-light" href="/homepage">Back</a>
+                        <a class="btn btn-sm btn-outline-dark" href="/logout">Logout</a>
+                        <a class="btn btn-sm btn-outline-dark" href="/homepage">Back</a>
                     </form>
                 </div>
                 
@@ -71,7 +71,7 @@
                                     <div class="col-md-12">
                                         {% for goal in goals %}
                                         {% if current_user.id == goal.added_by.id %}
-                                        <p>Goal {{goal.id}}</p>
+                                        <p>Goal </p>
                                         <div class="card">
                                             <div class="card-body text-dark">
                                                 {{goal.goal}}
@@ -105,8 +105,8 @@
                                                 {{goal.start_date}} | {{goal.target_date}}
                                             </div>
                                         </div>
-                                            <a class="btn btn-sm btn-outline-light" href="{{goal.id}}/editgoal">Edit this Goal</a>
-                                            <a class="btn btn-sm btn-outline-light" href="/setgoal"> Set a new goal</a>
+                                            <a class="btn btn-sm btn-outline-dark" href="{{goal.id}}/editgoal">Edit this Goal</a>
+                                            <a class="btn btn-sm btn-outline-dark" href="/setgoal"> Set a new goal</a>
                                             {% endif %}
                                             {% endfor %}
                                     </div>
@@ -116,8 +116,8 @@
                     </div>
                 </section>
 
-            <div class="container" id="task-box">
-                <h1>Way to go! You are making Progress!</h1>
+            <div class="container text-dark" id="task-box">
+                <h1 class="text-center">Way to go! You are making Progress!</h1>
                 <small>Here are a list of tasks you have completed in the last 30 days to get that goal</small>
                 <div class="content">
                     <h4>Tasks</h4>
@@ -129,7 +129,6 @@
                                 {{task.added_to_goal.goal}} <br>
                                 Task completed: <br> {{task.task}}</li>
                             <!-- <li>task.task}}</li> -->
-                            {% if task.completed_task %}{% endif %}
                         </ul>
 
                         {% endif %}

@@ -1,13 +1,13 @@
-body {background-color:#717682; color: white; background-image: url(../css/img/background3.jpg); background-size: cover; 
+body {background-color:#717682; ; background-image: url(../css/img/background6.jpg); background-size: cover; 
     }
 .container-fluid {box-shadow: inset 0 0 10px 10px #ffffff; padding:50px;width: 1200px;}
 .container{padding:  50px;   }
-#title{font-family: 'Lobster', cursive; color: #FFFFFF;}
+#title{font-family: 'Lobster', cursive; }
 #img-login{
     width:300px;
     height: 200px;
 }
 #task-box{
     width: 600px;
-    background-color:#3783A2 ;
+    background-color:white ;
 }

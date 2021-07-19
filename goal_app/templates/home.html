@@ -19,8 +19,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-    <script src="jquery/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/bootstrap.min.js"></script>
     <link rel="icon" href="images/icon.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
@@ -36,7 +34,7 @@
             <div class="container col-10 ">
                 <h1 id="title">Welcome {{current_user.first_name}} {{current_user.last_name}}!!!</h1>
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" href="/editprofile">Profile</a>
@@ -66,14 +64,14 @@
                         <tbody>
                             {% for goal in goals %}
                             <tr>{% if current_user.id == goal.added_by.id %}
-                                <td class="text-light" scope="row">{{ goal.goal }}</td>
-                                <td class="text-light" scope="row">{{ goal.start_date }}</td>
-                                <td class="text-light" scope="row">{{ goal.target_date }}</td>
-                                <td class="text-light" scope="row"><a href="/viewgoals" class="btn btn-outline-light btn-sm"
+                                <td class="text-dark" scope="row">{{ goal.goal }}</td>
+                                <td class="text-dark" scope="row">{{ goal.start_date }}</td>
+                                <td class="text-dark" scope="row">{{ goal.target_date }}</td>
+                                <td class="text-dark" scope="row"><a href="/viewgoals" class="btn btn-outline-dark btn-sm"
                                         aria-current="page">View</a> <a href="/{{goal.id}}/editgoal"
-                                        class=" btn-sm btn btn-outline-light">Edit</a> <a href="{{goal.id}}/addtasks"
-                                        class="btn btn-outline-light btn-sm ">Add tasks</a> <a href="{{goal.id}}/delete"
-                                        class="btn btn-outline-light btn-sm ">Delete</a></td>
+                                        class=" btn-sm btn btn-outline-dark">Edit</a> <a href="{{goal.id}}/addtasks"
+                                        class="btn btn-outline-dark btn-sm ">Add tasks</a> <a href="{{goal.id}}/delete"
+                                        class="btn btn-outline-dark btn-sm ">Delete</a></td>
                             </tr>
 
                         </tbody>
@@ -83,16 +81,18 @@
                 </div>
             </div>
             <div >
-                <div class=" container-fluid col-10 text-center">
+                <div class=" container-fluid col-10 text-center text-dark" >
                     <h3>Daily tasks</h3>
                     <div>
                         <form action="/homepage" method="POST">{% for task in tasks %}
-                            {% csrf_token %}
+                        {% csrf_token %}
+                        
                             <div>
                                 <label>
-                                    <input type="checkbox" name="c{{task.id}}" id="{{task.id}}" autocomplete="off"
-                                        value="clicked"></label>{% if current_user.id == task.goal_setter.id %}
-                                {{task.task}} {% endif %}
+                                    <input type="checkbox" name="c{{task.id}}" id="c{{task.id}}" autocomplete="off"
+                                        value="clicked"></label>
+                                {{task.task}}  
+
                                 {% endfor %}
                             </div>
                             <button type="submit" class="btn btn-outline-light">Completed</button>

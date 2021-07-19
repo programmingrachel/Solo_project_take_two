@@ -19,42 +19,48 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
     </script>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/login_reg_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
 
 </head>
-
-<body>
-    <div class="view" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Others/images/91.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">    <div>
-        <h3>Edit your information</h3>
+<body  >     
+    <div class="view">
         <a href="/homepage">Home</a> 
         <a href="/logout">Logout</a>
-        <form class="" action="/{{user_id}}/updateprofile" method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="first_name">First Name</label>
-                    <input name="first_name" type="text">
-                </div>
-                <div class="form-group">
-                    <label for="last_name">Last Name</label>
-                    <input name="last_name" type="text">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input name="email" type="text">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input name="password" type="password">
-                </div>
-                <div class="form-group">
-                    <label for="confirm">Confirm Password</label>
-                    <input name="confirm" type="password">
-                </div>
-                <div class="form_group">
-                    <button class="btn btn-primary" type="submit">update</button>
-                </div>
-        </form>
     </div>
+        <hr>
+        <div class="row">
+            <div class=" container-fluid col-md-5">
+                <form action="/{{user_id}}/updateprofile" method='POST'>
+                    {% csrf_token %}
+                    <fieldset>
+                        <p class="text-uppercase pull-center"> Edit your information</p>
+                        <div class="form-group">
+                            <input type="text" name="first_name" id="first_name" class="form-control input-lg"
+                                placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="last_name" id="last_name" class="form-control input-lg"
+                                placeholder="Last Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-lg"
+                                placeholder="Email Address">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-lg"
+                                placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="confirm" id="confirm" class="form-control input-lg"
+                                placeholder=" Confirm Password">
+                        </div>
+                        <div>
+                            <input type="submit" class="btn btn-lg btn-outline-dark" value="update">
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
 
+            <!-- style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Others/images/91.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;" -->
 
 </body>
