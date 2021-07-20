@@ -1,4 +1,4 @@
-body {background-color:#717682; ; background-image: url(../css/img/background6.jpg); background-size: cover; 
+body {background-color:#D8D0C2; ; background-image: url(../css/img/background6.jpg); background-size: cover; 
     }
 .container-fluid {box-shadow: inset 0 0 10px 10px #ffffff; padding:50px;width: 1200px;}
 .container{padding:  50px;   }
@@ -8,6 +8,30 @@ body {background-color:#717682; ; background-image: url(../css/img/background6.j
     height: 200px;
 }
 #task-box{
+    padding-top: 25px;
     width: 600px;
     background-color:white ;
+    border: outline solid black;
+    border: 1px solid black;
+
+}
+#daily-tasks{
+    padding-top: 35px;
+    background-color: #ECECEC;
+    border: 1px solid black;
+    
+}
+#tablecell-indent{
+    padding-left: 25px
+}
+td.text-emphasis{
+    font-style: italic;
+    text-decoration: underline;
+}
+#task-complete{
+    text-decoration: line-through
+}
+#task-indent-complete{
+    padding-left: 25px;
+    text-decoration: line-through
 }

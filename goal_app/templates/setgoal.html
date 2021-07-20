@@ -11,17 +11,7 @@
     <title>Set Goals</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
         {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
@@ -33,14 +23,15 @@
         <div class="container-fluid">
             <div class="row col-12 ">
                 <h1 class="text-center" id="title" >Hey {{current_user.first_name}}! Lets set some goals</h1>
-                <div class="navbar navbar-expand-lg  ">
+                <div class="navbar navbar-expand-lg justify-content-between  ">
                 <nav class="navbar">
-                    <a class="btn btn-outline-dark" href="/homepage">Home </a> 
-                    <a class="btn btn-outline-dark" href="/logout">Logout</a>
+                    <a class="btn btn-dark" href="/homepage">Home </a> 
+                    <a class="btn btn-dark" href="/logout">Logout</a>
                 </nav>
 
             </div>
             <div class="container">
+                <div class="row">
                 <div class="col-10">
                     <form action="/create_goal" method="POST">
                         {% csrf_token %}
@@ -66,34 +57,29 @@
                             <input type="date" name="target_date" id="" required>
                         </div>
                         <button class="btn btn-dark ">Set Goal</button>
-
                     </form>
-                    <!-- <img class="box-shadow-sm" id= "img-login"src="{% static 'css/img/giphy.gif' %}" alt=""> -->
-
                 </div>
+                <div>
+                <!-- <img class="box-shadow-sm" id= "img-login"src="{% static 'css/img/calender.jpg' %}" alt=""> -->
+            </div>
+                </div>
+                <blockquote class="blockquote  text-center">
+                    <p class="mb-0">        {{ quotes.h|safe}}
+                    </p>
+                </blockquote>
+            
             </div>
         </div>
     </div>
-    <blockquote class="blockquote text-center">
-        <p class="mb-0">        {{ quotes.h|safe}}
-        </p>
-    </blockquote>
-    <!-- <script>
-        const url = 'https://zenquotes.io/api/random';
-        fetch(url,{mode:'no-cors'})
-            .then((response) => response.json())
-            .then(function(data) {
-                let quote = data[0]["q"];
-                let author = data[0]["a"];
-                let htmlquote = data[0]["h"];
-                console.log(htmlquote);
-            })
-
-    </script> -->
-    <!-- <blockquote class="blockquote text-center">
-        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-    </blockquote> -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
 
 

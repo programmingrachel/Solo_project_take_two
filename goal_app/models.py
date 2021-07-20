@@ -1,6 +1,7 @@
 from os import error
 from django.db import models
 import re
+from django.db.models.fields import DateField
 
 from django.forms.widgets import CheckboxSelectMultiple
 import bcrypt
@@ -88,6 +89,9 @@ class Goal(models.Model):
     target_date=models.DateField(auto_now=False, default='null')
     tasks = models.ManyToManyField(User, related_name="tasks_for_goal")
     added_by = models.ForeignKey(User, related_name="users_goal",on_delete=models.CASCADE,null= True)
+    completed_goal= models.BooleanField(default=False, null=True )
+    completed_goal_date=models.DateField(default=None, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects= GoalManager()
@@ -106,6 +110,7 @@ class Task(models.Model):
     goal_setter=models.ForeignKey(User, related_name="made_goal", on_delete=models.CASCADE,null= True)
     added_to_goal = models.ForeignKey(Goal, related_name="task_for_goal", on_delete=models.CASCADE,null= True)
     completed_task= models.BooleanField(default=False, null=True )
+    completed_task_date=DateField(default=None,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects=TaskManager()

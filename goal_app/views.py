@@ -5,8 +5,8 @@ import bcrypt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import *
-from .forms import GoalForm, RegisterForm, LoginForm
 import json
+import datetime
 import requests
 
 
@@ -65,10 +65,11 @@ def home(request):
         for item in Task.objects.filter(goal_setter__id = user_id, completed_task=False): 
             if request.POST.get("c" + str(item.id)) == "clicked":
                 item.completed_task = True
+                item.completed_task_date = datetime.date.today()
                 item.save()
 
     if Goal.objects.filter(added_by__id=user_id).exists():
-        allgoals = Goal.objects.filter(added_by__id=user_id)
+        allgoals = Goal.objects.filter(added_by__id=user_id,completed_goal=False)
     else:
         allgoals = None
     if Task.objects.filter(goal_setter__id = user_id).exists():
@@ -80,11 +81,6 @@ def home(request):
         'goals': allgoals,
         'tasks': alltasks,
     }
-    # if request.method == "POST":
-    #     form = TaskForm(request.POST)
-    # else:
-    #     form = TaskForm(None)
-
     return render(request, 'home.html', context)
 
 def setgoal(request):
@@ -120,26 +116,6 @@ def create_goal(request):
                 added_by=User.objects.get(id=request.session['user_id']))
             return redirect('/homepage')
 
-
-# def add_task_to_goal(request, task_id):
-#     to_update = Task.objects.get(id=task_id)
-#     tasks = Task.objects.create(
-#     added_to_goal=Goal.objects.get(id=request.session['goal_id']))
-#     # created_at=to_update.created_at)
-#     # to_delete = Wish.objects.get(id=wish_id)
-#     # to_delete.delete()
-#     return redirect('/setgoal')
-
-# def task_completed(request, task_id):
-#     complete = Task.objects.get(id=task_id)
-#     task = Task.objects.create(
-#         task =complete.task,
-#         goal = complete.added_to_goal,
-#         added_by = User.objects.get(id=request.session['user_id']))
-
-#     return redirect('/homepage')
-
-
 def add_tasks_to_goal(request, goal_id):
     if request.method == "POST":
         errors = {}  # todo take this out
@@ -154,7 +130,8 @@ def add_tasks_to_goal(request, goal_id):
             new_task = Task.objects.create(
                 task=request.POST['task'],
                 goal_setter=user,
-                added_to_goal=goalinfo
+                added_to_goal=goalinfo,
+                created_at = datetime.date.today()
             )
     context = {
         'goals': Goal.objects.get(id=goal_id),
@@ -168,11 +145,13 @@ def add_tasks_to_goal(request, goal_id):
 def goals(request):
     quotes = "https://zenquotes.io/api/random"
     response= requests.get(quotes).json()
-
+    user_id = request.session['user_id']
     context = {
         'current_user': User.objects.get(id=request.session['user_id']),
-        'goals': Goal.objects.all(),
-        'tasks': Task.objects.filter(completed_task=True).order_by('-updated_at'),
+        'active_goals': Goal.objects.filter(added_by__id=user_id, completed_goal=False),
+        'completed_goal': Goal.objects.filter(added_by__id=user_id, completed_goal=True).order_by('-completed_goal_date'),
+        'active_tasks': Task.objects.filter(goal_setter__id=user_id, completed_task=False).order_by('-created_at'),
+        'completed_tasks': Task.objects.filter(goal_setter__id=user_id, completed_task=True).order_by('-completed_task_date'),
         'quotes': response[0]
     }
     return render(request, "view.html", context)
@@ -206,6 +185,19 @@ def updategoal(request, goal_id):
 def delete(request, goal_id):
     to_delete = Goal.objects.get(id=goal_id)
     to_delete.delete()
+    return redirect('/homepage')
+
+def goal_completed(request, goal_id):
+    tasks = Task.objects.filter(added_to_goal__id = goal_id, completed_task=False)
+    for item in tasks: 
+        item.completed_task = True
+        item.completed_task_date = datetime.date.today()
+        item.save()
+
+    to_update = Goal.objects.get(id=goal_id)
+    to_update.completed_goal = True
+    to_update.completed_goal_date = datetime.date.today()
+    to_update.save()
     return redirect('/homepage')
 
 
