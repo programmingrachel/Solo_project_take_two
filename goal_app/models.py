@@ -2,7 +2,7 @@ from os import error
 from django.db import models
 import re
 from django.db.models.fields import DateField
-
+import datetime
 from django.forms.widgets import CheckboxSelectMultiple
 import bcrypt
 from django.core import validators
@@ -49,6 +49,23 @@ class UserManager(models.Manager):
         if len(users_with_email) >= 1:
             errors['dup'] = "Email already in use"
         return errors
+    def update_validator(self, POSTdata):
+        errors = {}
+        if len(POSTdata['first_name']) < 3:
+            errors["first_name"] = "First Name must have a minimum of 3 characters"
+        if len(POSTdata['last_name']) < 3:
+            errors["last_name"] = "Last Name must have a minimum of 3 characters"
+        if len(POSTdata['email']) < 5:
+            errors["email"] = "Email is to short"
+        if len(POSTdata['password']) < 6:
+            errors["password"] = "Password is to short"
+        if POSTdata['password'] != POSTdata['confirm']:
+            errors['match'] = "Passwords don't match"
+        EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+        if not EMAIL_REGEX.match(POSTdata['email']):    # test whether a field matches the pattern            
+            errors['regex'] = "Invalid email address!"
+        return errors
+
 
 class User(models.Model):
     # first_name = models.CharField(max_length=255,validators=[validators.MinLengthValidator(5,"First name too short"),firstCapitalLetter,])
@@ -76,22 +93,27 @@ class GoalManager(models.Manager):
             errors['goal'] = "goal must have a minimum of 3 characters"
         if len(reqPOST['why']) <3:
             errors['why'] = "Please explain more about why?"
-        # if reqPOST['target_date'] < reqPOST['start_date']:
-        #     errors['target_date'] = "You must enter a target date after the start date."
+        # validate dates given
+        today = datetime.datetime.now()
+        start_date = datetime.datetime.strptime(reqPOST['starttime'], "%m/%d/%Y")
+        target_date = datetime.datetime.strptime(reqPOST['target_date'], "%m/%d/%Y")
+        if start_date < today:
+            errors['starttime'] = "Your goal can't start in the past"
+        if start_date > target_date:
+            errors['target_date'] = "Your target date is before the goal start"
         return errors 
-    
+
 
 class Goal(models.Model):
     goal = models.CharField(max_length=255)
     desc= models.CharField(max_length=255)
     short_term= models.CharField(max_length=255)
-    start_date=models.DateField(auto_now=False, default='null')
+    start_date=models.DateField(auto_now=False,default='null')
     target_date=models.DateField(auto_now=False, default='null')
     tasks = models.ManyToManyField(User, related_name="tasks_for_goal")
     added_by = models.ForeignKey(User, related_name="users_goal",on_delete=models.CASCADE,null= True)
     completed_goal= models.BooleanField(default=False, null=True )
     completed_goal_date=models.DateField(default=None, null=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects= GoalManager()

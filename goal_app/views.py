@@ -8,6 +8,8 @@ from .models import *
 import json
 import datetime
 import requests
+from time import gmtime, strftime
+
 
 
 def index(request):
@@ -49,6 +51,9 @@ def login(request):
             user = users_with_email[0]
             if bcrypt.checkpw(request.POST['password'].encode(), user.password.encode()):
                 request.session['user_id'] = user.id
+                request.session['first_name'] = user.first_name
+                request.session['last_name'] = user.last_name
+                request.session['email'] = user.email
                 return redirect('/homepage')
         messages.error(request, 'Email or passord id incorrect')
         return redirect('/')
@@ -69,11 +74,11 @@ def home(request):
                 item.save()
 
     if Goal.objects.filter(added_by__id=user_id).exists():
-        allgoals = Goal.objects.filter(added_by__id=user_id,completed_goal=False)
+        allgoals = Goal.objects.filter(added_by__id=user_id,completed_goal=False).order_by('target_date')
     else:
         allgoals = None
     if Task.objects.filter(goal_setter__id = user_id).exists():
-        alltasks = Task.objects.filter(goal_setter__id = user_id,completed_task=False)
+        alltasks = Task.objects.filter(goal_setter__id = user_id,completed_task=False).order_by('-updated_at')
     else:
         alltasks = None
     context = {
@@ -91,13 +96,17 @@ def setgoal(request):
         'goals': Goal.objects.all(),
         'current_user': User.objects.get(id=request.session['user_id']),
         'tasks': Task.objects.all(),
-        'quotes': response[0]
+        'quotes': response[0],
+        
     }
     return render(request, "setgoal.html", context)
 
 def create_goal(request):
     if request.method == "POST":
         errors = Goal.objects.goal_validator(request.POST)
+        # start_date = datetime.datetime.strptime(request.POST['starttime'], "%m/%d/%Y")
+        # target_date = datetime.datetime.strptime(request.POST['target_date'], "%m/%d/%Y")
+
         context = {
             'current_user': User.objects.get(id=request.session['user_id']),
         }
@@ -107,12 +116,16 @@ def create_goal(request):
             return redirect('/setgoal')
         else:
             user = User.objects.get(id=request.session["user_id"])
+            #need to format the date as %Y-%m-%d for the model
+            #bootstrap formats the date as mm/dd/yyyy
+            start_date = datetime.datetime.strptime(request.POST['starttime'], "%m/%d/%Y")
+            target_date = datetime.datetime.strptime(request.POST['target_date'], "%m/%d/%Y")
             goals = Goal.objects.create(
                 goal=request.POST['goal'],
                 desc=request.POST['why'],
                 short_term=request.POST['short'],
-                start_date=request.POST['starttime'],
-                target_date=request.POST['target_date'],
+                start_date=start_date,
+                target_date=target_date,
                 added_by=User.objects.get(id=request.session['user_id']))
             return redirect('/homepage')
 
@@ -148,7 +161,7 @@ def goals(request):
     user_id = request.session['user_id']
     context = {
         'current_user': User.objects.get(id=request.session['user_id']),
-        'active_goals': Goal.objects.filter(added_by__id=user_id, completed_goal=False),
+        'active_goals': Goal.objects.filter(added_by__id=user_id, completed_goal=False).order_by('target_date'),
         'completed_goal': Goal.objects.filter(added_by__id=user_id, completed_goal=True).order_by('-completed_goal_date'),
         'active_tasks': Task.objects.filter(goal_setter__id=user_id, completed_task=False).order_by('-created_at'),
         'completed_tasks': Task.objects.filter(goal_setter__id=user_id, completed_task=True).order_by('-completed_task_date'),
@@ -176,8 +189,13 @@ def updategoal(request, goal_id):
     to_update.goal = request.POST['goal']
     to_update.desc = request.POST['why']
     to_update.short_term = request.POST['short']
-    to_update.start_date = request.POST['starttime']
-    to_update.target_date = request.POST['target_date']
+    #need to format the date as %Y-%m-%d for the model
+    #bootstrap formats the date as mm/dd/yyyy
+    start_date = datetime.datetime.strptime(request.POST['starttime'], "%m/%d/%Y")
+    target_date = datetime.datetime.strptime(request.POST['target_date'], "%m/%d/%Y")
+
+    to_update.start_date = start_date
+    to_update.target_date = target_date
     to_update.save()
     return redirect('/homepage')
 
@@ -203,7 +221,7 @@ def goal_completed(request, goal_id):
 
 def updateprofile(request, user_id):
     if request.method == "POST":
-        errors = User.objects.user_validator(request.POST)
+        errors = User.objects.update_validator(request.POST)
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
@@ -216,14 +234,17 @@ def updateprofile(request, user_id):
             to_update.first_name = request.POST['first_name']
             to_update.last_name = request.POST['last_name']
             to_update.email = request.POST['email']
-            to_update.password = request.POST['password']
-            to_update.confirm = request.POST['confirm']
+            to_update.password = pw_hash
+            to_update.confirm = pw_hash
             to_update.save()
-    return redirect('/homepage')
+        return redirect('/homepage')
 
 
 def editprofile(request):
-    return render(request, "profile.html")
+    context = {
+        'user': User.objects.get(id=request.session['user_id']),
+    }
+    return render(request, "profile.html",context)
 
 
 def logout(request):
