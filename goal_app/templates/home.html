@@ -66,20 +66,23 @@
                                 <tbody>
                                     {% for goal in goals %}
                                     <tr >{% if current_user.id == goal.added_by.id %}
-                                        <td class="text-dark" scope="row">{{ goal.goal }}</td>
+                                        <td class="text-dark" scope="row">{{ goal.goal }} </td>
                                         <td class="text-dark" scope="row">{{ goal.start_date }}</td>
-                                        <td class="text-dark" scope="row">{{ goal.target_date }}</td>
+                                        <td class="text-dark" scope="row">{{ goal.target_date }} </td>
                                         <td class="text-dark" scope="row"><a href="/viewgoals" class="btn btn-outline-dark btn-sm"
                                                 aria-current="page">View</a> <a href="/{{goal.id}}/editgoal"
                                                 class=" btn-sm btn btn-outline-dark" >Edit</a> <a href="{{goal.id}}/addtasks"
                                                 class="btn btn-outline-dark btn-sm ">Add tasks</a><a href="{{goal.id}}/delete"
                                                 class="btn btn-outline-dark btn-sm ">Delete</a><a class="btn btn-outline-dark btn-sm" href="{{goal.id}}/goal_completed">Completed Goal</a>
                                             </td>
+                                            
                                     </tr>
                                 </tbody>
                                 {% endif %}
                                 {% endfor %}
+                                
                             </table>
+                            <small>*You should have at least three tasks planned to get closer to your goal*</small>
                     </div>
                     <div id="daily-tasks" class="col-4 ">
                         <h3>Daily tasks</h3>
